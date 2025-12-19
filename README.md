@@ -1,5 +1,3 @@
-# Independent-Project
-Incremental Evaluation of TPC-H Query 3 over Streaming Data Using Flink
 # Incremental Evaluation of TPC-H Query 3 over Streaming Data Using Flink
 
 ## 📋 Project Overview
@@ -51,14 +49,33 @@ tpch-q3-flink/
 │       ├── Q3IntervalVerifier.java   # State consistency checker
 │       └── Q3StreamingJob.java       # Main entry point
 ├── resources/
-│   ├── customer.tbl       # TPC-H test data
-│   ├── orders.tbl         # TPC-H test data
-│   └── lineitem.tbl       # TPC-H test data
+│   ├── customer.tbl       # TPC-H test data (included)
+│   ├── orders.tbl         # TPC-H test data (needs download)
+│   └── lineitem.tbl       # TPC-H test data (needs download)
 ├── logs/                  # Runtime logs
 │   └── flink_snapshot.log # Flink state snapshots
 ├── pom.xml               # Maven configuration
 └── README.md             # This file
 ```
+
+## ⚠️ Data Download Notice
+
+**Due to file size limitations, `orders.tbl` and `lineitem.tbl` are not included in this repository.** You need to download them from official TPC-H data generators.
+
+### Download Instructions:
+
+```bash
+# Method 1: Using dbgen (TPC-H Data Generator)
+# Download and compile dbgen from TPC-H tools
+# Generate 1GB scale factor data:
+./dbgen -s 1 -T O  # Generate orders.tbl
+./dbgen -s 1 -T L  # Generate lineitem.tbl
+
+# After downloading, place both files in the resources/ directory:
+mv orders.tbl lineitem.tbl src/main/resources/
+```
+
+
 
 ## 🔧 Core Components
 
@@ -130,18 +147,27 @@ LIMIT 10;
 - Java 11 or higher
 - Apache Maven 3.6+
 - Apache Flink 1.17.2 (included via Maven)
+- **TPC-H Data Files**: `orders.tbl` and `lineitem.tbl` in `resources/` directory
 
-### Build the Project
+### Step 1: Download Required Data Files
+```bash
+# Make sure you have the required TPC-H data files
+# Place them in the correct location:
+ls src/main/resources/
+# Should show: customer.tbl orders.tbl lineitem.tbl
+```
+
+### Step 2: Build the Project
 ```bash
 mvn clean package
 ```
 
-### Run the Streaming Job
+### Step 3: Run the Streaming Job
 ```bash
 mvn exec:java -Dexec.mainClass="tpch.Q3StreamingJob"
 ```
 
-### Run the Offline Verifier
+### Step 4: Run the Offline Verifier
 ```bash
 mvn exec:java -Dexec.mainClass="tpch.verifier.Q3IntervalVerifier"
 ```
@@ -214,88 +240,16 @@ Verifier outputs statistical information:
 - Early filtering reduces state size
 - Batched snapshot writing
 
-## 📊 Performance Metrics
-
-The system tracks:
-- **Event Processing Rate**: Events per second
-- **State Size**: Number of entries in each state
-- **Computational Error**: Difference between incremental and batch results
-- **Snapshot Frequency**: Time between state checkpoints
-
-## 🧪 Testing Methodology
-
-### 1. **Functional Testing**
-- Small dataset verification
-- Edge case handling (empty results, zero values)
-- Operation type testing (INSERT/DELETE)
-
-### 2. **Correctness Testing**
-- Offline verifier comparison
-- Error threshold validation (< 1e-6)
-- State consistency checks
-
-### 3. **Performance Testing**
-- Varying window sizes (500, 1000, 2000)
-- Different snapshot intervals
-- Parallelism tuning (1, 2, 4)
-
-### 4. **Recovery Testing**
-- Simulated failures
-- State restoration from snapshots
-- Processing continuity verification
-
 ## 📝 Usage Notes
 
 1. **Data Preparation**: Ensure TPC-H test files are in `resources/` directory
-2. **Log Directory**: Create `logs/` directory before first run
-3. **Memory Configuration**: Adjust JVM parameters based on data size
-4. **Floating-Point Precision**: Uses tolerance value for comparisons
-
-## 🚨 Known Limitations
-
-1. **Data Size**: Designed for 1GB datasets; larger datasets may require memory tuning
-2. **Window Size**: Fixed FIFO window; adaptive windows not implemented
-3. **Parallelism**: Limited to key-based partitioning; custom partitioners not included
-4. **Verification**: Offline verifier requires complete data replay
-
-## 🔮 Future Enhancements
-
-1. **Adaptive Windowing**: Dynamic window size based on data characteristics
-2. **Distributed Verification**: Online verification without full replay
-3. **More TPC-H Queries**: Extend to other TPC-H queries
-4. **Benchmark Suite**: Comprehensive performance benchmarking
-5. **Visualization Dashboard**: Real-time monitoring dashboard
-
-## 📚 References
-
-- [TPC-H Benchmark Specification](http://www.tpc.org/tpch/)
-- [Apache Flink Documentation](https://nightlies.apache.org/flink/flink-docs-release-1.17/)
-- [Stream Processing Patterns](https://www.oreilly.com/library/view/stream-processing-with/9781491973855/)
-- [Incremental View Maintenance](https://dl.acm.org/doi/10.1145/135226.135232)
+2. **File Download**: Remember to download `orders.tbl` and `lineitem.tbl` separately
+3. **Log Directory**: Create `logs/` directory before first run
+4. **Memory Configuration**: Adjust JVM parameters based on data size
+5. **Floating-Point Precision**: Uses tolerance value for comparisons
 
 ## 📄 License
 
 This project is licensed under the Apache License 2.0 - see the LICENSE file for details.
 
-## 🤝 Contributing
-
-Contributions are welcome! Please feel free to submit a Pull Request.
-
-1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add some amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
-
-## 👥 Authors
-
-- **Project Developer** - [Your Name]
-- **Supervisor** - [Supervisor Name]
-- **Institution** - [Your University/Organization]
-
-## 🙏 Acknowledgments
-
-- Apache Flink community for the excellent streaming framework
-- TPC Council for the TPC-H benchmark specification
-- All contributors and testers who helped improve this project
 

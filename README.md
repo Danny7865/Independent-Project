@@ -299,8 +299,3 @@ Contributions are welcome! Please feel free to submit a Pull Request.
 - TPC Council for the TPC-H benchmark specification
 - All contributors and testers who helped improve this project
 
----
-
-**Project Status**: Active Development  
-**Last Updated**: December 2024  
-**Version**: 1.0.0

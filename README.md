@@ -247,9 +247,3 @@ Verifier outputs statistical information:
 3. **Log Directory**: Create `logs/` directory before first run
 4. **Memory Configuration**: Adjust JVM parameters based on data size
 5. **Floating-Point Precision**: Uses tolerance value for comparisons
-
-## 📄 License
-
-This project is licensed under the Apache License 2.0 - see the LICENSE file for details.
-
-

@@ -197,20 +197,20 @@ private static final int WINDOW_SIZE = 1000;  // FIFO window size
 ### Real-time Output
 Streaming job emits incremental updates:
 ```
-[Q3 UPDATE] orderKey=123, date=1995-01-01, priority=0, oldRevenue=100.00, newRevenue=150.00
+[Q3 UPDATE] orderKey=5998051, date=1994-11-30, priority=0, oldRevenue=0.00, newRevenue=28259.97
 ```
 
 ### State Snapshots
 Periodically saved to `logs/flink_snapshot.log`:
 ```
-SNAPSHOT,event=10000,orderKey=123,date=1995-01-01,priority=0,revenue=150.000000
+SNAPSHOT,event=1720000,orderKey=34433,date=1995-01-20,priority=0,revenue=89799.897200
 ```
 
 ### Verification Results
 Verifier outputs statistical information:
 ```
-[VERIFY] event=50000 compared=120 avgError=1.23e-06 maxError=5.67e-05
-[FINAL VERIFY] totalCompared=60000 avgError=2.34e-06 maxError=7.89e-05
+[VERIFY] event=13600000 compared=456 avgError=6.088229e-12 maxError=5.820766e-11
+[FINAL VERIFY] totalCompared=44657 avgError=6.347675e-12 maxError=5.820766e-11
 ```
 
 ## 🔍 Key Technical Features
